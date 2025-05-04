@@ -1,0 +1,76 @@
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import Image from "next/image";
+import bgImage from "@/public/school-classroom.jpg";
+import Link from "next/link";
+
+export default function DiceRollPage() {
+  const [rolled, setRolled] = useState(false);
+  const [number, setNumber] = useState(1);
+  const [showMessage, setShowMessage] = useState(false);
+
+  const rollDice = () => {
+    const rolledNumber = Math.floor(Math.random() * 6) + 1;
+    setNumber(rolledNumber);
+    setRolled(true);
+    if (rolledNumber === 6) {
+      setTimeout(() => {
+        setShowMessage(true);
+      }, 1000);
+    }
+  };
+
+  return (
+    <div className="min-h-screen relative flex items-center justify-center bg-pink-200">
+      <Image
+        src={bgImage}
+        alt="Classroom background"
+        layout="fill"
+        objectFit="cover"
+        className="z-0 opacity-70"
+      />
+
+      <div className="z-10 text-center p-6 bg-white bg-opacity-90 rounded-2xl shadow-lg">
+        <h1 className="text-3xl font-bold font-cursive mb-4 text-pink-700">
+          Tap to Roll the Dice 🎲
+        </h1>
+
+        <motion.button
+          whileTap={{ scale: 0.8 }}
+          className="px-6 py-3 bg-pink-500 text-white font-semibold rounded-xl shadow-md hover:bg-pink-600"
+          onClick={rollDice}
+        >
+          Roll Dice
+        </motion.button>
+
+        {rolled && (
+          <motion.div
+            className="mt-4 text-xl text-pink-700 font-cursive"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
+            You rolled a {number}!
+          </motion.div>
+        )}
+
+        {showMessage && (
+          <motion.div
+            className="mt-6 text-lg text-green-800 font-cursive"
+            initial={{ scale: 0.5, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+          >
+            🎉 You are lucky to have a daughter like me!
+            <br />
+            <Link href="/happy">
+              <button
+                className="mt-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+              >
+                Continue ➡️
+              </button>
+            </Link>
+          </motion.div>
+        )}
+      </div>
+    </div>
+  );
+}
